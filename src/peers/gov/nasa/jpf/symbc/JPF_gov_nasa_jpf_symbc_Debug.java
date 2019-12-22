@@ -744,6 +744,7 @@ public class JPF_gov_nasa_jpf_symbc_Debug extends NativePeer {
     private static String getAbstractedState(MJIEnv env, int objvRef) {
         // get the abstracted state as a string sequence based on the abstraction
         String abstractedState = null;
+        System.out.println(ABSTRACTION);
         switch (ABSTRACTION) { // the abstraction for the object state machine.
         case HEAP_SHAPE_ABSTRACTION:
             abstractedState = getHeapShapeAbstractedState(env, objvRef);
@@ -789,7 +790,6 @@ public class JPF_gov_nasa_jpf_symbc_Debug extends NativePeer {
     public static boolean matchAbstractState(MJIEnv env, int objRef, int objvRef) {
         // get the sequence for the abstracted state
         String abstractedState = getAbstractedState(env, objvRef);
-
         if (checkAndUpdateAbstractStatesSeenSoFar(abstractedState) == NEW_STATE) {
             System.out.println("new state");
             return false; // Verify.ignoreIf will not ignore this state.

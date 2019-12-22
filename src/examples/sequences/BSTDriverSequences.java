@@ -45,6 +45,7 @@ public class BSTDriverSequences {
 
 	public static void testDriver(int length){
 		BST t = new BST();
+		System.out.println("------ New tree ------");
 		for (int i=0; i<length; i++){
 			Verify.beginAtomic();
 			switch (Verify.random(2)){
@@ -61,9 +62,11 @@ public class BSTDriverSequences {
 				t.find(0);
 				break;
 			}
+			System.out.println("------ DUMMY ------");
 			Verify.endAtomic();
 			Verify.ignoreIf(Debug.matchAbstractState(t));
 		}
+		System.out.println("------ End of tree ------");
 	}
 
 	public static void main(String[] args){

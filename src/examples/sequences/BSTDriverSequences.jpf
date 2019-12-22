@@ -1,0 +1,4 @@
+target = sequences.BSTDriverSequences
+classpath = ${jpf-symbc}/build/examples
+native_classpath = ${jpf-symbc}/build/examples
+sourcepath = ${jpf-symbc}/src/examples
