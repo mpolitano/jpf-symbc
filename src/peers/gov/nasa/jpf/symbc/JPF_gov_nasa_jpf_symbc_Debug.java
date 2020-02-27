@@ -18,7 +18,9 @@
 
 package gov.nasa.jpf.symbc;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import gov.nasa.jpf.annotation.MJI;
@@ -681,8 +683,9 @@ public class JPF_gov_nasa_jpf_symbc_Debug extends NativePeer {
     private static final int FIELD_ABSTRACTION = 2;
     private static final int OBSERVER_ABSTRACTION = 3;
     private static final int BRANCH_ABSTRACTION = 4;
+    private static final int FIELDS_ABSTRACTION_BMC = 5;
     // by default, the abstraction is based on heap shape.
-    private static final int ABSTRACTION = HEAP_SHAPE_ABSTRACTION;
+    private static final int ABSTRACTION = FIELDS_ABSTRACTION_BMC;
 
     /**
      * Abstraction based on heap shape
@@ -757,6 +760,9 @@ public class JPF_gov_nasa_jpf_symbc_Debug extends NativePeer {
             break;
         case BRANCH_ABSTRACTION:
             abstractedState = getBranchAbstractedState(env, objvRef);
+            break;
+        case FIELDS_ABSTRACTION_BMC:
+            abstractedState = getFieldsAbstractedState(env, objvRef);
             break;
         default:
             break;
@@ -870,6 +876,72 @@ public class JPF_gov_nasa_jpf_symbc_Debug extends NativePeer {
     public static void clearMeasurements(MJIEnv env, int objRef) {
         Observations.lastMeasuredMetricValue = 0.0;
     }
+    
+    
+    
+    
+//  /*************************************************************************/
+//  /**
+//   * CODE BY MARIANO POLITANO
+//   * 
+//   * 
+//   * Abstraction based on fields
+//   */
+//  private static Map<Integer, Map<String, Integer>> getFieldsAbstractedState(MJIEnv env, int objvRef) {
+    private static String getFieldsAbstractedState(MJIEnv env, int objvRef) {
+  	 if (objvRef == MJIEnv.NULL) { // vertex v is null
+           // for null vertex, discovery and finish time are the same
+           return null; 
+  	 }
+//		mapSequence = new HashMap<>();
+      ClassInfo ci = env.getClassInfo(objvRef);
+      FieldInfo[] fields = ci.getDeclaredInstanceFields();
+      //Obtain fields
+//      Object obj=ObjectConverter.javaObjectFromJPFObject(env.getElementInfo(objvRef));
+//      Field[] fieldsClass = obj.getClass().getDeclaredFields();
+		Map<String, Integer> mapFields = new HashMap<>();
+
+      for (int i = 0; i < fields.length; i++) {
+     	
+//      		mapFields = new HashMap<>();
+//      		String aux = stringFields( env,  objvRef);
+              String fname = fields[i].getName();
+              if ((fields[i] instanceof ReferenceFieldInfo)) {
+//            String fname = fields[i].getName();
+              int temp = env.getReferenceField(objvRef, fname);
+              mapFields.put(fname, temp);
+              getFieldsAbstractedState(env, temp);
+              }
+              else
+                  mapFields.put(fname, env.getIntField(objvRef, fname));
+//      	}
+      }
+      mapSequence.put(objvRef,mapFields);
+      System.out.println(sequence);
+      return mapSequence.toString();
+  }
+ 
+//
+//  
+//  
+    
+
+
+  private static String stringFields(MJIEnv env, int objvRef) {
+  	String sequences = "";
+      ClassInfo ci = env.getClassInfo(objvRef);
+      FieldInfo[] fields = ci.getDeclaredInstanceFields();
+//      Object obj=ObjectConverter.javaObjectFromJPFObject(env.getElementInfo(objvRef));
+//      Field[] fieldsClass = obj.getClass().getDeclaredFields();
+      for (int i = 0; i < fields.length; i++)
+      	sequences += fields[i];
+  	return sequences;
+	}
+  
+  /*************************************************************************/
+
+      //Code by Mariano.
+  private static Map<Integer, Map<String, Integer>> mapSequence =  new HashMap<>();
     
     
 
