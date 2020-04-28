@@ -1,0 +1,12 @@
+
+target = issta2006.treemap.DriverTreeMap
+classpath = ${jpf-symbc}/build/examples
+sourcepath = ${jpf-symbc}/src/examples
+
+listener = gov.nasa.jpf.symbc.sequences.SymbolicSequenceListener,gov.nasa.jpf.listener.CoverageAnalyzer
+ymbolic.min_int=-100 
+symbolic.max_int=100
+coverage.include=*.TreeMap_pred
+coverage.show_methods=true
+coverage.show_bodies=true
+

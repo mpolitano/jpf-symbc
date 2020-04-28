@@ -1,0 +1,11 @@
+@using=jpf-symbc
+
+target = issta2006.bintree.BinTreeDriverSequences
+classpath = ${jpf-symbc}/build/examples
+sourcepath = ${jpf-symbc}/src/examples
+
+listener = gov.nasa.jpf.symbc.sequences.SymbolicSequenceListener,gov.nasa.jpf.listener.CoverageAnalyzer
+
+coverage.include=*.BinTree_pred
+coverage.show_methods=true
+coverage.show_bodies=true
