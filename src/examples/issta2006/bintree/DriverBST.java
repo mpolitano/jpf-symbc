@@ -74,7 +74,7 @@ public class DriverBST {
 
 	public static void main(String[] args){
 		Utils.readScope();
-		testDriver(Utils.scope); // with 2 you do not get complete coverage
+		testDriver(5); // with 2 you do not get complete coverage
 		Debug.printPC("Path Condition: ");
 		System.out.println();
 	}
