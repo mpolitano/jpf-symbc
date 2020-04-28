@@ -2,7 +2,7 @@
 
 
 #repr=("key:concrete" )
-repr=("key:value" "key:set" "key:concrete" "color:set" "color:list" "key:list,color:list" "key:set,color:list" "key:concrete,color:list" "key:list,color:set" "key:list,color:concrete" "key:set,color:set" "key:concrete,color:concrete")
+repr=("key:list" "key:set" "key:concrete" "color:set" "color:list" "key:list,color:list" "key:set,color:list" "key:concrete,color:list" "key:list,color:set" "key:list,color:concrete" "key:set,color:set" "key:concrete,color:concrete")
 #scope=("3" "5" "8" "11" "15" "20")
 #
 for i in "${repr[@]}"
