@@ -558,14 +558,14 @@ public class TreeMap_pred {
 //	}
 //
 		//Always must be 2 more getInt. Max sequences
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 7; i++) {
 			Verify.beginAtomic();
 				switch (Verify.random(1)) {
 				case 0:
-					tree.put(Verify.getInt(0,3));// max is literals, 
+					tree.put(Verify.getInt(0,5));// max is literals, 
 					break;
 				case 1:
-					tree.remove(Verify.getInt(0,3));
+					tree.remove(Verify.getInt(0,5));
 					break;
 			}
 			Verify.endAtomic();
