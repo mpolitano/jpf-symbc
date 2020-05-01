@@ -721,6 +721,7 @@ public class JPF_gov_nasa_jpf_symbc_Debug extends NativePeer {
 	private static final int ABSTRACTION = FIELD_BMC_ABSTRACTION;
 
 	public static String representation;
+	public static int newstate=0;
 	public final static String funAbsFile = "abstractionFunction.propierties";
 
 	//Read coverage from file created by Jacoco
@@ -753,6 +754,8 @@ public class JPF_gov_nasa_jpf_symbc_Debug extends NativePeer {
 		// the contains check is redundant. retained for clarity.
 		if (!abstracStatesSeenSoFarField.contains(state)) {
 			abstracStatesSeenSoFarField.add(state);
+			System.out.println(state);
+			newstate++;
 			return NEW_STATE; // new state
 		}
 		return OLD_STATE; // state seen before.
@@ -865,7 +868,6 @@ public class JPF_gov_nasa_jpf_symbc_Debug extends NativePeer {
 	private static Map<String, Values> getAbstractedStateField(MJIEnv env, int objvRef){
 
 		Map<String, Values> abstractedState = getFieldBMCAbstractedState(env, objvRef);
-		System.out.println(abstractedState);
 		return abstractedState;
 	}
 	

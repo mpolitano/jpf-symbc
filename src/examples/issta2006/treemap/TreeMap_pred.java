@@ -1,33 +1,67 @@
-/**
- * Semi-automatically generated files used to measure predicate coverage.
- * Details can be found at http://mir.cs.illinois.edu/coverage
- */
 package issta2006.treemap;
+/*
+ * Copyright (C) 2014, United States Government, as represented by the
+ * Administrator of the National Aeronautics and Space Administration.
+ * All rights reserved.
+ *
+ * Symbolic Pathfinder (jpf-symbc) is licensed under the Apache License, 
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
+ * 
+ *        http://www.apache.org/licenses/LICENSE-2.0. 
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and 
+ * limitations under the License.
+ */
+
+//
+// Copyright (C) 2006 United States Government as represented by the
+// Administrator of the National Aeronautics and Space Administration
+// (NASA).  All Rights Reserved.
+//
+// This software is distributed under the NASA Open Source Agreement
+// (NOSA), version 1.3.  The NOSA has been approved by the Open Source
+// Initiative.  See the file NOSA-1.3-JPF at the top of the distribution
+// directory tree for the complete NOSA document.
+//
+// THE SUBJECT SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY WARRANTY OF ANY
+// KIND, EITHER EXPRESSED, IMPLIED, OR STATUTORY, INCLUDING, BUT NOT
+// LIMITED TO, ANY WARRANTY THAT THE SUBJECT SOFTWARE WILL CONFORM TO
+// SPECIFICATIONS, ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR
+// A PARTICULAR PURPOSE, OR FREEDOM FROM INFRINGEMENT, ANY WARRANTY THAT
+// THE SUBJECT SOFTWARE WILL BE ERROR FREE, OR ANY WARRANTY THAT
+// DOCUMENTATION, IF PROVIDED, WILL CONFORM TO THE SUBJECT SOFTWARE.
+//
+
+
+import gov.nasa.jpf.symbc.Debug;
+import gov.nasa.jpf.vm.Verify;
+
 
 public class TreeMap_pred {
 
-	private transient Entry root = null;
+  private transient Entry root = null;
 
 	private transient int size = 0;
 
-	private void incrementSize() {
+	private void incrementSize() { /*modCount++;*/
 		size++;
 	}
 
-	private void decrementSize() {
+	private void decrementSize() { /*modCount++;*/
 		size--;
-	}
-
-	public TreeMap_pred() {
 	}
 
 	public int size() {
 		return size;
 	}
 
-//	public boolean containsKey(int key) {
-//		return getEntry(key) != null;
-//	}
+	public boolean containsKey(int key) {
+		return getEntry(key) != null;
+	}
 
 	private Entry getEntry(int key) {
 		Entry p = root;
@@ -41,7 +75,6 @@ public class TreeMap_pred {
 					p = p.right;
 				}
 			}
-
 		}
 		return null;
 	}
@@ -53,34 +86,28 @@ public class TreeMap_pred {
 			root = new Entry(key, null);
 			return;
 		}
-
 		while (true) {
 			if (key == t.key) {
 				return;
-			} else {
-				if (key < t.key) {
-					if (t.left != null) {
-						t = t.left;
-					} else {
-						incrementSize();
-						t.left = new Entry(key, t);
-						fixAfterInsertion(t.left);
-						return;
-					}
-
+			} else if (key < t.key) {
+				if (t.left != null) {
+					t = t.left;
 				} else {
-					if (t.right != null) {
-						t = t.right;
-					} else {
-						incrementSize();
-						t.right = new Entry(key, t);
-						fixAfterInsertion(t.right);
-						return;
-					}
-
+					incrementSize();
+					t.left = new Entry(key, t);
+					fixAfterInsertion(t.left);
+					return;
+				}
+			} else { // key > t.key
+				if (t.right != null) {
+					t = t.right;
+				} else {
+					incrementSize();
+					t.right = new Entry(key, t);
+					fixAfterInsertion(t.right);
+					return;
 				}
 			}
-
 		}
 	}
 
@@ -94,27 +121,33 @@ public class TreeMap_pred {
 		return;
 	}
 
-//	@Override
-//	public String toString() {
-//		String res = "";
-//		if (root != null)
-//			res = root.toString();
-//		return res;
-//	}
+	public void print() {
+		if (root != null) {
+			root.print(0);
+		}
+	}
 
-//	public String concreteString(int max_level) {
-//		String res = "";
-//		if (root != null)
-//			res = root.concreteString(max_level, 0);
-//		return res;
-//	}
+	public String toString() {
+		String res = "";
+		if (root != null) {
+			res = root.toString();
+		}
+		return res;
+	}
 
-	private final static boolean RED = false;
+	public String concreteString(int max_level) {
+		String res = "";
+		if (root != null) {
+			res = root.concreteString(max_level, 0);
+		}
+		return res;
+	}
 
-	private final static boolean BLACK = true;
+	private static final boolean RED = false;
+
+	private static final boolean BLACK = true;
 
 	static class Entry {
-
 		int key;
 
 		Entry left = null;
@@ -142,66 +175,81 @@ public class TreeMap_pred {
 			return key;
 		}
 
-		@Override
 		public String toString() {
-			String res = "{ " + (color == BLACK ? "B" : "R") + " " + key + " ";
-			if (left == null)
+			String res = "{ " + (color == BLACK ? "B" : "R") + " ";
+			if (left == null) {
 				res += "null";
-			else
+			} else {
 				res += left.toString();
+			}
 			res += " ";
-			if (right == null)
+			if (right == null) {
 				res += "null";
-			else
+			} else {
 				res += right.toString();
+			}
 			res += " }";
 			return res;
 		}
 
-//		public String concreteString(int max_level, int cur_level) {
-//			String res;
-//			if (cur_level == max_level) {
-//				res = "{ subtree }";
-//			} else {
-//				res = "{ " + (color == BLACK ? "B" : "R") + key + " ";
-//				if (left == null)
-//					res += "null";
-//				else
-//					res += left.concreteString(max_level, cur_level + 1);
-//				res += " ";
-//				if (right == null)
-//					res += "null";
-//				else
-//					res += right.concreteString(max_level, cur_level + 1);
-//				res += " }";
-//			}
-//
-//			return res;
-//		}
+		public String concreteString(int max_level, int cur_level) {
+			String res;
+			if (cur_level == max_level) {
+				res = "{ subtree }";
+				//		System.out.println("Brekekek");
+			} else {
+				res = "{ " + (color == BLACK ? "B" : "R") + key + " ";
+				if (left == null) {
+					res += "null";
+				} else {
+					res += left.concreteString(max_level, cur_level + 1);
+				}
+				res += " ";
+				if (right == null) {
+					res += "null";
+				} else {
+					res += right.concreteString(max_level, cur_level + 1);
+				}
+				res += " }";
+			}
+
+			return res;
+		}
+
+		public void print(int k) {
+
+			/*for (int i = 0; i < k; i++)
+				System.out.print(" ");*/
+			//System.out.println(key + (color == BLACK ? "(B)" : "(R)"));
+
+			if (left != null) {
+				left.print(k + 2);
+			}
+			if (right != null) {
+				right.print(k + 2);
+			}
+		}
 
 	}
 
 	private Entry successor(Entry t) {
 		if (t == null) {
 			return null;
-		} else {
-			if (t.right != null) {
-				Entry p = t.right;
-				while (p.left != null) {
-					p = p.left;
-				}
-				return p;
-			} else {
-				Entry p = t.parent;
-				Entry ch = t;
-				while (p != null && ch == p.right) {
-					ch = p;
-					p = p.parent;
-				}
-				return p;
+		} else if (t.right != null) {
+			Entry p = t.right;
+			while (p.left != null) {
+				p = p.left;
 			}
+			return p;
+		} else {
+			Entry p = t.parent;
+			Entry ch = t;
+			while (p != null && ch == p.right) {
+				ch = p;
+				p = p.parent;
+			}
+			return p;
 		}
-
 	}
 
 	private static boolean colorOf(Entry p) {
@@ -213,8 +261,9 @@ public class TreeMap_pred {
 	}
 
 	private static void setColor(Entry p, boolean c) {
-		if (p != null)
+		if (p != null) {
 			p.color = c;
+		}
 	}
 
 	private static Entry leftOf(Entry p) {
@@ -225,13 +274,13 @@ public class TreeMap_pred {
 		return (p == null) ? null : p.right;
 	}
 
+	/** From CLR **/
 	private void rotateLeft(Entry p) {
 		Entry r = p.right;
 		p.right = r.left;
 		if (r.left != null) {
 			r.left.parent = p;
 		}
-
 		r.parent = p.parent;
 		if (p.parent == null) {
 			root = r;
@@ -242,18 +291,17 @@ public class TreeMap_pred {
 				p.parent.right = r;
 			}
 		}
-
 		r.left = p;
 		p.parent = r;
 	}
 
+	/** From CLR **/
 	private void rotateRight(Entry p) {
 		Entry l = p.left;
 		p.left = l.right;
 		if (l.right != null) {
 			l.right.parent = p;
 		}
-
 		l.parent = p.parent;
 		if (p.parent == null) {
 			root = l;
@@ -264,12 +312,12 @@ public class TreeMap_pred {
 				p.parent.left = l;
 			}
 		}
-
 		l.right = p;
 		p.parent = l;
 	}
 
-	public void fixAfterInsertion(Entry x) {
+	/** From CLR **/
+	private void fixAfterInsertion(Entry x) {
 		x.color = RED;
 		while (x != null && x != root && x.parent.color == RED) {
 			if (parentOf(x) == leftOf(parentOf(parentOf(x)))) {
@@ -284,7 +332,6 @@ public class TreeMap_pred {
 						x = parentOf(x);
 						rotateLeft(x);
 					}
-
 					setColor(parentOf(x), BLACK);
 					setColor(parentOf(parentOf(x)), RED);
 					if (parentOf(parentOf(x)) != null) {
@@ -303,7 +350,6 @@ public class TreeMap_pred {
 						x = parentOf(x);
 						rotateRight(x);
 					}
-
 					setColor(parentOf(x), BLACK);
 					setColor(parentOf(parentOf(x)), RED);
 					if (parentOf(parentOf(x)) != null) {
@@ -317,11 +363,12 @@ public class TreeMap_pred {
 
 	private void deleteEntry(Entry p) {
 		decrementSize();
+		// If strictly internal, first swap position with successor.
 		if (p.left != null && p.right != null) {
 			Entry s = successor(p);
 			swapPosition(s, p);
 		}
-
+		// Start fixup at replacement node, if it exists.
 		Entry replacement = (p.left != null ? p.left : p.right);
 		if (replacement != null) {
 			replacement.parent = p.parent;
@@ -334,7 +381,6 @@ public class TreeMap_pred {
 					p.parent.right = replacement;
 				}
 			}
-
 			p.left = p.right = p.parent = null;
 			if (p.color == BLACK) {
 				fixAfterDeletion(replacement);
@@ -346,7 +392,6 @@ public class TreeMap_pred {
 				if (p.color == BLACK) {
 					fixAfterDeletion(p);
 				}
-
 				if (p.parent != null) {
 					if (p == p.parent.left) {
 						p.parent.left = null;
@@ -355,26 +400,26 @@ public class TreeMap_pred {
 							p.parent.right = null;
 						}
 					}
-
 					p.parent = null;
 				}
 			}
 		}
-
 	}
 
+	/** From CLR **/
 	private void fixAfterDeletion(Entry x) {
 		while (x != root && colorOf(x) == BLACK) {
 			if (x == leftOf(parentOf(x))) {
 				Entry sib = rightOf(parentOf(x));
 				if (colorOf(sib) == RED) {
+					//assert false;
 					setColor(sib, BLACK);
 					setColor(parentOf(x), RED);
 					rotateLeft(parentOf(x));
 					sib = rightOf(parentOf(x));
 				}
-
-				if (colorOf(leftOf(sib)) == BLACK && colorOf(rightOf(sib)) == BLACK) {
+				if (colorOf(leftOf(sib)) == BLACK
+						&& colorOf(rightOf(sib)) == BLACK) {
 					setColor(sib, RED);
 					x = parentOf(x);
 				} else {
@@ -384,14 +429,13 @@ public class TreeMap_pred {
 						rotateRight(sib);
 						sib = rightOf(parentOf(x));
 					}
-
 					setColor(sib, colorOf(parentOf(x)));
 					setColor(parentOf(x), BLACK);
 					setColor(rightOf(sib), BLACK);
 					rotateLeft(parentOf(x));
 					x = root;
 				}
-			} else {
+			} else { // symmetric
 				Entry sib = leftOf(parentOf(x));
 				if (colorOf(sib) == RED) {
 					setColor(sib, BLACK);
@@ -399,8 +443,8 @@ public class TreeMap_pred {
 					rotateRight(parentOf(x));
 					sib = leftOf(parentOf(x));
 				}
-
-				if (colorOf(rightOf(sib)) == BLACK && colorOf(leftOf(sib)) == BLACK) {
+				if (colorOf(rightOf(sib)) == BLACK
+						&& colorOf(leftOf(sib)) == BLACK) {
 					setColor(sib, RED);
 					x = parentOf(x);
 				} else {
@@ -410,7 +454,6 @@ public class TreeMap_pred {
 						rotateLeft(sib);
 						sib = leftOf(parentOf(x));
 					}
-
 					setColor(sib, colorOf(parentOf(x)));
 					setColor(parentOf(x), BLACK);
 					setColor(leftOf(sib), BLACK);
@@ -419,15 +462,22 @@ public class TreeMap_pred {
 				}
 			}
 		}
+
 		setColor(x, BLACK);
 	}
 
+	/**
+	 * Swap the linkages of two nodes in a tree.
+	 */
 	private void swapPosition(Entry x, Entry y) {
+		// Save initial values.
 		Entry px = x.parent, lx = x.left, rx = x.right;
 		Entry py = y.parent, ly = y.left, ry = y.right;
 		boolean xWasLeftChild = px != null && x == px.left;
 		boolean yWasLeftChild = py != null && y == py.left;
-		if (x == py) {
+		//	System.out.println("Swap: "+x.key+" "+y.key);
+		// Swap, handling special cases of one being the other's parent.
+		if (x == py) { // x was y's parent
 			x.parent = y;
 			if (yWasLeftChild) {
 				y.left = x;
@@ -444,14 +494,11 @@ public class TreeMap_pred {
 				} else {
 					py.right = x;
 				}
-
 			}
-
 			y.left = lx;
 			y.right = rx;
 		}
-
-		if (y == px) {
+		if (y == px) { // y was x's parent
 			y.parent = x;
 			if (xWasLeftChild) {
 				x.left = y;
@@ -468,30 +515,25 @@ public class TreeMap_pred {
 				} else {
 					px.right = y;
 				}
-
 			}
-
 			x.left = ly;
 			x.right = ry;
 		}
-
+		// Fix children's parent pointers
 		if (x.left != null) {
 			x.left.parent = x;
-		} else {
 		}
-
 		if (x.right != null) {
 			x.right.parent = x;
-		} else {
 		}
-
 		if (y.left != null) {
 			y.left.parent = y;
 		}
-
 		if (y.right != null) {
 			y.right.parent = y;
 		}
+
+		// Swap colors
 		boolean c = x.color;
 		x.color = y.color;
 		y.color = c;
@@ -504,4 +546,31 @@ public class TreeMap_pred {
 		}
 	}
 
+	public static void main(String[] Argv) {
+		TreeMap_pred tree = new TreeMap_pred();
+//		int i=0;
+//		tree = (TreeMapSimple)Debug.makeSymbolicRef("TreeMapSimple", tree);
+//		if (tree != null) {
+//			tree.put(i++);
+////			Verify.ignoreIf(Debug.matchAbstractState(tree));	
+//		}
+//		
+//	}
+//
+		//Always must be 2 more getInt. Max sequences
+		for (int i = 0; i < 5; i++) {
+			Verify.beginAtomic();
+				switch (Verify.random(1)) {
+				case 0:
+					tree.put(Verify.getInt(0,3));// max is literals, 
+					break;
+				case 1:
+					tree.remove(Verify.getInt(0,3));
+					break;
+			}
+			Verify.endAtomic();
+			Verify.ignoreIf(Debug.matchAbstractState(tree));
+			}
+			
+		}
 }

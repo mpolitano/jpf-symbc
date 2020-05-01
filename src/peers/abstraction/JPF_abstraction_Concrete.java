@@ -2,6 +2,7 @@ package abstraction;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -17,34 +18,36 @@ import gov.nasa.jpf.vm.FieldInfo;
 import gov.nasa.jpf.vm.MJIEnv;
 import gov.nasa.jpf.vm.ReferenceFieldInfo;
 
-public class JPF_abstraction_Concrete implements Values<Map<Integer, Set<Integer>>>{
-	protected Map<Integer, Set<Integer>> values = new LinkedHashMap<Integer, Set<Integer>>();
-
+public class JPF_abstraction_Concrete implements Values<LinkedList<Tuple<Integer,Integer>>>{
+	protected LinkedList<Tuple<Integer,Integer>> values = new LinkedList<Tuple<Integer,Integer>>();
+	boolean refDom = false;
 	
+	public boolean isRefDom() {
+		return refDom;
+	}
+
+	public void setDomRef(boolean refDom) {
+		this.refDom = refDom;
+	}
+
 	@Override
 	public void add(int val, int dom) {
-		Set<Integer> s = values.get(dom);
-		if (s == null) {
-			s = new HashSet<Integer>();
-			values.put(dom, s);
-		}
-		s.add(val);
+		Tuple<Integer,Integer> s = new Tuple<Integer,Integer>(0,0);
+		s.setFirst(dom);
+		s.setSecond(val);
+		values.add(s);
+//		if (s == null) {
+//			s = new HashSet<Integer>();
+//			values.put(dom, s);
+//		}
+//		s.add(val);
 			
 	}
 	
 	@Override
-	public Map<Integer, Set<Integer>> getValues(){
+	public LinkedList<Tuple<Integer, Integer>> getValues(){
 		return values;
 	}
-	
-	@Override
-	public String toString(){
-		String result = "";
-		for (Entry<Integer, Set<Integer>> entry : values.entrySet()) {
-		    result += " N" + entry.getKey() + ":" + entry.getValue();
-		}
-		return result;
-		}
 
 	@Override
 	public int hashCode() {
@@ -70,6 +73,37 @@ public class JPF_abstraction_Concrete implements Values<Map<Integer, Set<Integer
 			return false;
 		return true;
 	}
+	
+	@Override
+	public String toString(){
+		String result = "";
+	    for (int i=0; i< values.size(); i++) {
+	    	
+			result +=  refDom? 
+						" ( N" + values.get(i).getFirst()+ ": N" + values.get(i).getSecond() + ") " :
+						" ( N" + values.get(i).getFirst()+ ":" + values.get(i).getSecond() + ") ";
+	    }
+		return result;
+	}
+//        LinkedList current = head;
+//        while(current.getNext() != null){
+//            result += current.getData();
+//            if(current.getNext() != null){
+//                 result += ", ";
+//            }
+//            current = current.getNext();
+//        }
+//        return "List: " + result;
+//        
+//		values.iterator()
+//		  return "( N" + values.getFirst().toString() + ":" + values.getSecond().toString() + ")";
+//
+//		}
+
+
+
+
+
 
 
 

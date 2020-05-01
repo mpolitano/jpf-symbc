@@ -1,12 +1,15 @@
 
-target = issta2006.treemap.DriverTreeMap
+target = issta2006.treemap.TreeMap_pred
 classpath = ${jpf-symbc}/build/examples
 sourcepath = ${jpf-symbc}/src/examples
-
+symbolic.method = issta2006.treemap.TreeMap_pred.put(con) , issta2006.treemap.TreeMap_pred.remove(con)
 listener = gov.nasa.jpf.symbc.sequences.SymbolicSequenceListener,gov.nasa.jpf.listener.CoverageAnalyzer
-ymbolic.min_int=-100 
+symbolic.min_int=-100 
 symbolic.max_int=100
 coverage.include=*.TreeMap_pred
 coverage.show_methods=true
 coverage.show_bodies=true
-
+vm.storage.class=nil
+#cg.randomize_choices=random
+search.class = .search.heuristic.BFSHeuristic
+symbolic.dp=no_solver

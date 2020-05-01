@@ -52,11 +52,13 @@ public class JPF_abstraction_function{
  	}
 	
 	//fields, value  and number of object
-	public void addRepresentation(String field, int value, int dom) {
+	public void addRepresentation(String field, int value, int dom, boolean isRef) {
 		Values fe = mapSequence.get(field);
 		if (fe == null) {
 			RepresentationType rep = typeFieldExtension.get(field);
 			fe = createExtension(field,rep);
+			if(rep.equals(RepresentationType.CONCRETE) && isRef)
+				((JPF_abstraction_Concrete) fe).setDomRef(true);
 			mapSequence.put(field, fe);
  		}
 		fe.add(value,dom);
@@ -89,10 +91,19 @@ public class JPF_abstraction_function{
 
 		Queue<Integer> nodes = new LinkedList<Integer>();
 		Set<Integer> setVisited = new HashSet<Integer>();
-		nodes.add(objvRef);
+		LinkedList<Integer> nodesVisited = new LinkedList<Integer>();
+
 		int nodeNumber = 0;
+
+		nodes.add(objvRef);
+		nodesVisited.add(nodeNumber);
+
 		while (!nodes.isEmpty()) {
+			nodeNumber=nodesVisited.getLast();
+
 			Integer current = nodes.poll();
+			int currentNode = nodesVisited.poll();
+
 			ClassInfo ci = env.getClassInfo(current);
 			FieldInfo[] fields = ci.getInstanceFields();
 			for (int i = 0; i < fields.length; i++) {
@@ -111,7 +122,7 @@ public class JPF_abstraction_function{
 						else //TODO: is int, could be has other type
 							value =env.getIntField(current, fname);
 						
-						addRepresentation(fname,value, nodeNumber ); //TODO: change amount parametrs
+						addRepresentation(fname,value, currentNode,false ); //TODO: change amount parametrs
 
 					}else { //ReferenceFields.
 						int temp = env.getReferenceField(current, fname);
@@ -120,15 +131,16 @@ public class JPF_abstraction_function{
 							nodeNumber++;
 						}
 						int refNode = nodeNumber +1;
-						addRepresentation(fname,refNode, nodeNumber); //TODO: change amount parametrs
+						addRepresentation(fname,refNode, nodeNumber,true); //TODO: change amount parametrs
 
 					}
 				}else { //is omit field, but if is reference, I need insert in queue
 					if ((fields[i] instanceof ReferenceFieldInfo)) {
 						int temp = env.getReferenceField(current, fname);
 						if (temp != MJIEnv.NULL  && setVisited.add(temp)) { // are null
-							nodes.add((temp)); //for run structure
+							nodes.add((temp));
 							nodeNumber++;
+							nodesVisited.add(nodeNumber);
 						}
 
 					}
@@ -156,7 +168,6 @@ public class JPF_abstraction_function{
 		int nodeNumber = 0;
 		nodesJPF.add(objvRef);
 		nodesVisited.add(nodeNumber);
-		int numberAfterRef = 0;
 		
 		while (!nodesJPF.isEmpty()) {
 			nodeNumber=nodesVisited.getLast();
@@ -183,7 +194,7 @@ public class JPF_abstraction_function{
 					else //TODO: is int, could be has other type
 						value =env.getIntField(currentJPF, fname);
 					
-					addRepresentation(fname,value, currentNode ); //TODO: change amount parametrs
+					addRepresentation(fname,value, currentNode,false ); //TODO: change amount parametrs
 
 				}else { //ReferenceFields.
 					int temp = env.getReferenceField(currentJPF, fname); //TODO: if there are 3 references, no work
@@ -193,10 +204,10 @@ public class JPF_abstraction_function{
 							nodeNumber++;
 							nodesVisited.add(nodeNumber);
 //							int refNode = nodeNumber +1;
-							addRepresentation(fname,nodeNumber, currentNode); //TODO: change amount parametrs
 //							addRepresentation(fname,refNode, nodeNumber); //TODO: change amount parametrs
 						}
 //					int refNode = nodeNumber +1;
+					addRepresentation(fname,nodeNumber, currentNode, true); //TODO: change amount parametrs
 
 					}
 				}		
