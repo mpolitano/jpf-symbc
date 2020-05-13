@@ -1,11 +1,6 @@
 package issta2006.treemap;
 
-
-import java.io.FileInputStream;
-import java.util.Properties;
-
 import gov.nasa.jpf.symbc.Debug;
-import gov.nasa.jpf.symbc.JPF_gov_nasa_jpf_symbc_Debug;
 import gov.nasa.jpf.vm.Verify;
 
 
