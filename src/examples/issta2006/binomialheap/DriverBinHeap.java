@@ -46,7 +46,7 @@ public class DriverBinHeap {
 
 	public static void testDriver(){
 		BinomialHeap_pred t = new BinomialHeap_pred();
-		int scope=5;
+		int scope=4;
 		int maxLength=scope+2;
 		System.out.println("------ New tree ------");
 		for (int i=0; i<maxLength; i++){
