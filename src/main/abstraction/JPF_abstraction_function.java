@@ -52,15 +52,18 @@ public class JPF_abstraction_function{
  	}
 	
 	//fields, value  and number of object
-	public void addRepresentation(String field, int value, int dom, boolean isRef) {
+	public void addRepresentation(String field, int value, int dom, boolean isRef)
+{
 		Values fe = mapSequence.get(field);
+		RepresentationType rep = typeFieldExtension.get(field);
+
 		if (fe == null) {
-			RepresentationType rep = typeFieldExtension.get(field);
 			fe = createExtension(field,rep);
-			if(rep.equals(RepresentationType.CONCRETE) && isRef)
-				((JPF_abstraction_Concrete) fe).setDomRef(true);
+			if(rep.equals(RepresentationType.CONCRETE))
+				((JPF_abstraction_Concrete) fe).setDomRef(isRef);
 			mapSequence.put(field, fe);
  		}
+		
 		fe.add(value,dom);
 		
 		mapSequence.put(field, fe);
@@ -122,13 +125,14 @@ public class JPF_abstraction_function{
 						else //TODO: is int, could be has other type
 							value =env.getIntField(current, fname);
 						
-						addRepresentation(fname,value, currentNode,false ); //TODO: change amount parametrs
+						addRepresentation(fname,value, currentNode,false); //TODO: change amount parametrs
 
 					}else { //ReferenceFields.
 						int temp = env.getReferenceField(current, fname);
 						if (temp != MJIEnv.NULL   && setVisited.add(temp)) {// are null
 							nodes.add((temp));
 							nodeNumber++;
+							nodesVisited.add(nodeNumber);
 						}
 						int refNode = nodeNumber +1;
 						addRepresentation(fname,refNode, nodeNumber,true); //TODO: change amount parametrs
@@ -194,21 +198,21 @@ public class JPF_abstraction_function{
 					else //TODO: is int, could be has other type
 						value =env.getIntField(currentJPF, fname);
 					
-					addRepresentation(fname,value, currentNode,false ); //TODO: change amount parametrs
+					addRepresentation(fname,value, currentNode,false); //TODO: change amount parametrs
 
 				}else { //ReferenceFields.
 					int temp = env.getReferenceField(currentJPF, fname); //TODO: if there are 3 references, no work
-					if (temp != MJIEnv.NULL ) {
-						if(setVisited.add(temp)) {// are null
+					if (temp == MJIEnv.NULL ) 
+						addRepresentation(fname,-1, currentNode,true); //TODO: change amount parametrs
+					else {
+						if(!setVisited.add(temp)) { // are null, case parent
+							addRepresentation(fname,currentNode-1, currentNode,true); //TODO: change amount parametrs
+						}else {
 							nodesJPF.add((temp));
 							nodeNumber++;
 							nodesVisited.add(nodeNumber);
-//							int refNode = nodeNumber +1;
-//							addRepresentation(fname,refNode, nodeNumber); //TODO: change amount parametrs
-						}
-//					int refNode = nodeNumber +1;
-					addRepresentation(fname,nodeNumber, currentNode, true); //TODO: change amount parametrs
-
+							addRepresentation(fname,nodeNumber, currentNode,true); //TODO: change amount parametrs
+						}//	
 					}
 				}		
 			}

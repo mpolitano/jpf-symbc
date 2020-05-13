@@ -134,14 +134,5 @@ public class BinTree_pred {
 	        return smallest(n.left);
 	    }
 	}
-	
-
-//	public static void main(String[] args) {
-//		BinTree_pred a = new BinTree_pred();
-//		a.add(0);
-//
-//		a.remove(1);
-//		System.out.println(a.toString());
-//	}
 
 }

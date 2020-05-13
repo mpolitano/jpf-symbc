@@ -722,28 +722,10 @@ public class JPF_gov_nasa_jpf_symbc_Debug extends NativePeer {
 
 	public static String representation;
 	public static int newstate=0;
-	public final static String funAbsFile = "abstractionFunction.propierties";
-
-	//Read coverage from file created by Jacoco
-	public static void readFunction() {
-
-		String propFile = System.getProperty("properties", funAbsFile);
-		Properties props = new Properties();
-		try {
-			props.load(new FileInputStream(propFile));
-			representation = props.getProperty("representation");
-//			branch_missed = Integer.parseInt(props.getProperty("branch.missed"));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.exit(1);
-		}
-	}
 	
  	private static Map<String, Values> getFieldBMCAbstractedState(MJIEnv env, int objvRef){
  		JPF_abstraction_function abstractedState = new JPF_abstraction_function();
- 		readFunction();
- 		abstractedState.setAbstractionFuction(representation);
+		abstractedState.setAbstractionFuction(SymbolicAbstractionFunctionFields.abstractionFunction);
  		return abstractedState.getFieldsAbstractedState(env, objvRef);
  	}
 	
@@ -900,9 +882,6 @@ public class JPF_gov_nasa_jpf_symbc_Debug extends NativePeer {
 		return OLD_STATE; // state seen before.
 	}
 
-
-
-
 	/**
 	 *
 	 * Performs abstract matching
@@ -915,30 +894,30 @@ public class JPF_gov_nasa_jpf_symbc_Debug extends NativePeer {
 		//------------------------------------------------
 		//Code by Mariano
 		//------------------------------------------------
-		if(ABSTRACTION == FIELD_BMC_ABSTRACTION) {
-			Map<String,Values> abstractedState = getAbstractedStateField(env, objvRef);
-			if(checkAndUpdateAbstractStatesSeenSoFarField(abstractedState) == NEW_STATE){
-				System.out.println("new state");
-				return false; // Verify.ignoreIf will not ignore this state.
-			}
-
-			System.out.println("old state");
-			return true; // Verify.ignoreIf will ignore this state.
-
-		}else {
+		switch (ABSTRACTION) {
+			case FIELD_BMC_ABSTRACTION:
+				Map<String,Values> abstractedState = getAbstractedStateField(env, objvRef);
+				if(checkAndUpdateAbstractStatesSeenSoFarField(abstractedState) == NEW_STATE){
+	//				System.out.println("new state");
+					System.out.println("new own state: " + newstate);
+					return false; // Verify.ignoreIf will not ignore this state.
+				}
+	
+	//			System.out.println("old state");
+				return true; // Verify.ignoreIf will ignore this state.		
+			default:
+		//------------------------------------------------
+		//------------------------------------------------
+				String abstractedStateDefault = getAbstractedState(env, objvRef);
 		
-		//------------------------------------------------
-		//------------------------------------------------
-
-			String abstractedState = getAbstractedState(env, objvRef);
-	
-			if(checkAndUpdateAbstractStatesSeenSoFar(abstractedState) == NEW_STATE){
-				System.out.println("new state");
-				return false; // Verify.ignoreIf will not ignore this state.
+				if(checkAndUpdateAbstractStatesSeenSoFar(abstractedStateDefault) == NEW_STATE){
+					System.out.println("new state");
+					return false; // Verify.ignoreIf will not ignore this state.
+				}
+		
+				System.out.println("old state");
+				return true; // Verify.ignoreIf will ignore this state.
+				
 			}
-	
-			System.out.println("old state");
-			return true; // Verify.ignoreIf will ignore this state.
-		}
 	}
 }

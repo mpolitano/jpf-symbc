@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.util.Properties;
 
 import gov.nasa.jpf.symbc.Debug;
+import gov.nasa.jpf.symbc.JPF_gov_nasa_jpf_symbc_Debug;
 import gov.nasa.jpf.vm.Verify;
 
 
@@ -29,7 +30,7 @@ import gov.nasa.jpf.vm.Verify;
 public class DriverTreeMap {
 
 	public static void testDriver(int length){
-		TreeMap_pred t = new TreeMap_pred();
+		TreeMap_pred tree = new TreeMap_pred();
 //
 //		while (true) {
 //			b.add(5);
@@ -40,33 +41,33 @@ public class DriverTreeMap {
 //	}
 		for (int i=0; i<length; i++){
 			Verify.beginAtomic();
-			switch (Verify.random(1)){
-			case 0:
-				System.out.println("adding...");
-				t.put(Verify.random(length));
-				break;
-			case 1:
-				System.out.println("removing...");
-				t.remove(Verify.random(length));
-				break;
-//			case 2:
-//				System.out.println("contains...");
-//				t.containsKey(Verify.getInt(0,length));
-//				break;
-//				
+			switch (Verify.random(1)) {
+				case 0:
+					tree.put(Verify.getInt(0,length-1));
+					break;
+				case 1:
+					tree.remove(Verify.getInt(0,length-1));
+					break;
 			}
 			Verify.endAtomic();
-			Verify.ignoreIf(Debug.matchAbstractState(t));
-		}
+			Verify.ignoreIf(Debug.matchAbstractState(tree));
+		}					
+
 	}
 //	}
 
 	public static void main(String[] args){
-		TreeMap_pred t = new TreeMap_pred();
+//		TreeMap_pred t = new TreeMap_pred();
+//while(true) {
 //		t.put(1);
 //		t.put(0);
-//		t.put(1);
+//		t.put(2);
+//		t.put(-1);
+//		t.put(5);
+//
+//
 //Verify.ignoreIf(Debug.matchAbstractState(t));
+//}
 //t.put(2);
 //t.put(0);
 //t.put(1);
@@ -74,9 +75,7 @@ public class DriverTreeMap {
 
 //System.out.println(t.toString());
 //		readScope();
-		testDriver(8); // with 8 you get maximium coverage
-		Debug.printPC("Path Condition: ");
-		System.out.println();
+		testDriver(4); // with 8 you get maximium coverage
 	}
 	
 }

@@ -1,15 +1,14 @@
 @using=jpf-symbc
 
-target = issta2006.bintree.DriverBST
+target = issta2006.binomialheap.DriverBinHeap
 classpath = ${jpf-symbc}/build/examples
 sourcepath = ${jpf-symbc}/src/examples
 
 listener = gov.nasa.jpf.symbc.sequences.SymbolicSequenceListener,gov.nasa.jpf.listener.CoverageAnalyzer
 
-coverage.include=*.BinTree_pred
+coverage.include=*.BinomialHeap_pred
 coverage.show_methods=true
 coverage.show_bodies=true
 search.class = .search.heuristic.BFSHeuristic
-abstraction.function=left:list
-#allFields
+abstraction.function=key:list
 scope=3

@@ -10,6 +10,5 @@ coverage.include=*.BinTree_pred
 coverage.show_methods=true
 coverage.show_bodies=true
 search.class = .search.heuristic.BFSHeuristic
-abstraction.function=left:list
-#allFields
+abstraction.function=value:list
 scope=3

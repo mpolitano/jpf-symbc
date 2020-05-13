@@ -79,10 +79,13 @@ public class JPF_abstraction_Concrete implements Values<LinkedList<Tuple<Integer
 		String result = "";
 	    for (int i=0; i< values.size(); i++) {
 	    	
-			result +=  refDom? 
-						" ( N" + values.get(i).getFirst()+ ": N" + values.get(i).getSecond() + ") " :
-						" ( N" + values.get(i).getFirst()+ ":" + values.get(i).getSecond() + ") ";
-	    }
+			result +=   values.get(i).getSecond() == -1?
+					" ( N" + values.get(i).getFirst()+ ":" + "null )":
+							refDom? //case null
+							" ( N" + values.get(i).getFirst()+ ": N"  + values.get(i).getSecond() + ") ":
+							" ( N" + values.get(i).getFirst()+ ":" + values.get(i).getSecond() + ") " ;
+
+	    }	
 		return result;
 	}
 //        LinkedList current = head;

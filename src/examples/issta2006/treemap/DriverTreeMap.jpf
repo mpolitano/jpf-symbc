@@ -2,14 +2,26 @@
 target = issta2006.treemap.TreeMap_pred
 classpath = ${jpf-symbc}/build/examples
 sourcepath = ${jpf-symbc}/src/examples
-symbolic.method = issta2006.treemap.TreeMap_pred.put(con) , issta2006.treemap.TreeMap_pred.remove(con)
+symbolic.method = issta2006.treemap.TreeMap_pred.put(con),issta2006.treemap.TreeMap_pred.remove(con)
 listener = gov.nasa.jpf.symbc.sequences.SymbolicSequenceListener,gov.nasa.jpf.listener.CoverageAnalyzer
-symbolic.min_int=-100 
-symbolic.max_int=100
-coverage.include=*.TreeMap_pred
+#symbolic.debug=true
+
+
+
+symbolic.minint = 1
+symbolic.maxint = 5
+symbolic.max_long = 5
+symbolic.min_long = 1
+
+
+
+coverage.include=issta2006.treemap.TreeMap_pred
 coverage.show_methods=true
+
 coverage.show_bodies=true
+
+
+
 vm.storage.class=nil
-#cg.randomize_choices=random
+#cg.randomize_choices=randomx
 search.class = .search.heuristic.BFSHeuristic
-symbolic.dp=no_solver

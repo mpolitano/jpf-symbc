@@ -561,7 +561,7 @@ public class TreeMap_pred {
 //	}
 //
 //		readScope();
-		int scope=4;
+		int scope=10;
 		int maxLength=scope+2;
 		System.out.println(scope);
 		//Always must be 2 more getInt. Max sequences of randoop -1
@@ -578,30 +578,9 @@ public class TreeMap_pred {
 			Verify.endAtomic();
 			Verify.ignoreIf(Debug.matchAbstractState(tree));
 			}
-	}
-//		int maxLength=;
-////		System.out.println(scope);
-//		//Always must be 2 more getInt. Max sequences of randoop -1
-//		for (int i = 0; i < maxLength; i++) {
-//			Verify.beginAtomic();
-//
-//			Integer b1=(Integer)Debug.makeSymbolicInteger("b1");
-//				switch (Verify.random(1)) {
-//				case 0:
-//					System.out.println(b1);
-//					tree.put(b1);// max is literals, 
-//					break;
-//				case 1:
-//					tree.remove(b1);
-//					break;
-//			}
-//			Verify.endAtomic();
-//			Verify.ignoreIf(Debug.matchAbstractState(tree));
-//			}
-//		}
-		
-//	public final static String funAbsFile = "abstractionFunction.propierties";
-//	public static String scope;
+		}
+	public final static String funAbsFile = "abstractionFunction.propierties";
+	public static String scope;
 
 //	public static void readScope() {
 //
