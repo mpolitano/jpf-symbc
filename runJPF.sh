@@ -1,10 +1,12 @@
 #!/bin/bash
 
-examplePath="src/examples/issta2006/bintree/DriverBST.jpf"
+examplePath="src/examples/issta2006/bintree/DriverBinHeap.jpf"
 libPath="lib/"
 runJar="../jpf-core/build/RunJPF.jar"
 #drivers = {"issta2006/treemap/DriverTreeMap.jpf" "issta2006/binTree/DriverBinTree.jpf"}
-repr=("value:concrete" "value:set" "value:list" "left:list" )
+#repr=("value:concrete" "value:set" "value:list" "left:list" )
+repr=("key:list" "key:concrete" "key:set" "left:list" )
+
 #rrepr=("key:list" "key:set" "key:concrete" "color:set" "color:list" "key:list,color:list" "key:set,color:list" "key:concrete,color:list" "key:list,color:set" "key:list,color:concrete" "key:set,color:set" "key:concrete,color:concrete")
 #scope=("3" "5" "8" "11" "15" "20")
 #

@@ -44,23 +44,25 @@ import gov.nasa.jpf.symbc.Preconditions;
  */
 public class DriverBinHeap {
 
-	public static void testDriver(int length){
+	public static void testDriver(){
 		BinomialHeap_pred t = new BinomialHeap_pred();
+		int scope=5;
+		int maxLength=scope+2;
 		System.out.println("------ New tree ------");
-		for (int i=0; i<length; i++){
+		for (int i=0; i<maxLength; i++){
 			Verify.beginAtomic();
 			switch (Verify.random(2)){
 			case 0:
 				System.out.println("decrease key...");
-				t.insert(Verify.getInt(0,length-1));
+				t.insert(Verify.getInt(0,scope));
 				break;
 			case 1:
 				System.out.println("delete...");
-				t.delete(Verify.getInt(0,length-1));				
+				t.delete(Verify.getInt(0,scope));				
 				break;
 			case 2:
 				System.out.println("extract min...");
-				t.decreaseKeyValue(Verify.getInt(0,length-1), Verify.getInt(0,length-1));
+				t.decreaseKeyValue(Verify.getInt(0,scope), Verify.getInt(0,scope));
 				break;
 			}
 			Verify.endAtomic();
@@ -73,7 +75,7 @@ public class DriverBinHeap {
 
 	public static void main(String[] args){
 //		Utils.readScope();
-		testDriver(3); // with 2 you do not get complete coverage
+		testDriver(); // with 2 you do not get complete coverage
 		Debug.printPC("Path Condition: ");
 		System.out.println();
 	}
