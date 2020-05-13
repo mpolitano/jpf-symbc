@@ -740,6 +740,7 @@ public class SymbolicInstructionFactory extends gov.nasa.jpf.jvm.bytecode.Instru
 		if (fp&&debugMode) System.out.println("Using floating point theory for reals in Z3.");
 
 		MinMax.collectMinMaxInformation(conf);
+		SymbolicAbstractionFunctionFields.collectAbstractionFunctionInformation(conf);
 		/* no longer required here, now read in MinMax, see line above
 
 		String[] intmin, intmax, realmin, realmax, dontcare;
