@@ -561,7 +561,7 @@ public class TreeMap_pred {
 //	}
 //
 //		readScope();
-		int scope=4;
+		int scope=5;
 		int maxLength=scope+2;
 		System.out.println(scope);
 		//Always must be 2 more getInt. Max sequences of randoop -1

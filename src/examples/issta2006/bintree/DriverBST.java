@@ -44,24 +44,26 @@ import gov.nasa.jpf.symbc.Preconditions;
  */
 public class DriverBST {
 
-	public static void testDriver(int length){
+	public static void testDriver(){
+		int scope=5;
+		int maxLength=scope+2;
 		BinTree_pred t = new BinTree_pred();
 		System.out.println("------ New tree ------");
-		for (int i=0; i<length; i++){
+		for (int i=0; i<maxLength; i++){
 			Verify.beginAtomic();
 			switch (Verify.random(2)){
 			case 0:
 				System.out.println("adding...");
-				t.add(Verify.getInt(0,length-1));
+				t.add(Verify.getInt(0,scope));
 				break;
 			case 1:
 				System.out.println("removing...");
 
-				t.remove(Verify.getInt(0,length-1));
+				t.remove(Verify.getInt(0,scope));
 				break;
 			case 2:
 				System.out.println("finding...");
-				t.find(Verify.getInt(0,length-1));
+				t.find(Verify.getInt(0,scope));
 				break;
 			}
 			Verify.endAtomic();
@@ -74,7 +76,7 @@ public class DriverBST {
 
 	public static void main(String[] args){
 //		Utils.readScope();
-		testDriver(4); // with 2 you do not get complete coverage
+		testDriver(); // with 2 you do not get complete coverage
 		Debug.printPC("Path Condition: ");
 		System.out.println();
 	}

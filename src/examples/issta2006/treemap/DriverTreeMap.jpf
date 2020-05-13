@@ -12,7 +12,8 @@ symbolic.minint = 1
 symbolic.maxint = 5
 symbolic.max_long = 5
 symbolic.min_long = 1
-abstraction.function=key:list
+abstraction.function=key:list,color:list
+
 
 
 
