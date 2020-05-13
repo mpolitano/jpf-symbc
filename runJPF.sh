@@ -1,6 +1,6 @@
 #!/bin/bash
 
-examplePath="src/examples/issta2006/binTree/DriverBST.jpf"
+examplePath="src/examples/issta2006/bintree/DriverBST.jpf"
 libPath="lib/"
 runJar="../jpf-core/build/RunJPF.jar"
 #drivers = {"issta2006/treemap/DriverTreeMap.jpf" "issta2006/binTree/DriverBinTree.jpf"}
